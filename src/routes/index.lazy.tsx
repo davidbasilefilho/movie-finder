@@ -5,12 +5,12 @@ import { API_BASE_URL, API_OPTIONS } from "@/lib/const";
 import {
   MovieSchema,
   movieSchema,
-  SearchSchema,
   searchSchema,
+  SearchSchema,
 } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Clapperboard } from "lucide-react";
 import { useForm } from "react-hook-form";
 
@@ -24,7 +24,9 @@ function Index() {
     resolver: zodResolver(searchSchema),
   });
 
-  const useGetMoviesQuery = useQuery({
+  const navigate = useNavigate();
+
+  const { data, isLoading, isError, error, isSuccess } = useQuery({
     queryKey: ["movies"],
     refetchOnWindowFocus: false,
     queryFn: async () => {
@@ -39,10 +41,14 @@ function Index() {
 
   const onSubmit = (values: SearchSchema) => {
     console.log(values);
+    navigate({
+      to: "/search",
+      search: { ...values, query: encodeURI(values.query ?? "") },
+    });
   };
 
   return (
-    <div className="container mx-auto md:py-8 py-4 px-4">
+    <div className="container mx-auto md:py-8 py-4 px-10">
       <div className="p-8 md:p-0">
         <div className="flex w-full items-center justify-center flex-col">
           <h1 className="text-center inline-block">
@@ -80,14 +86,12 @@ function Index() {
 
       <section className="mt-6">
         <h2>Popular movies</h2>
-        {useGetMoviesQuery.isLoading && <p>Loading...</p>}
-        {useGetMoviesQuery.isError && (
-          <p>Error fetching movies: {useGetMoviesQuery.error.message}</p>
-        )}
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error fetching movies: {error.message}</p>}
 
-        {useGetMoviesQuery.isSuccess && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-            {useGetMoviesQuery.data!.results.map((movie) => (
+        {isSuccess && (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {data?.results.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>

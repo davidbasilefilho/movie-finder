@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 export const searchSchema = z.object({
-  query: z.string().nonempty(),
+  query: z.string().optional(),
+  include_adult: z.string().default("false"),
+  primary_release_year: z.string().optional(),
+  page: z.number().int().positive().default(1),
+  region: z.string().optional(),
+  year: z.string().optional(),
 });
 
 export type SearchSchema = z.infer<typeof searchSchema>;
