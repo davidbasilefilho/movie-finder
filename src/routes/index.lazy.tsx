@@ -1,3 +1,4 @@
+import HorizontalLoadingBar from "@/components/horizontal-loading-bar";
 import MovieCard from "@/components/movie-card";
 import { QueryInput } from "@/components/query-input";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -86,7 +87,7 @@ function Index() {
 
       <section className="mt-6">
         <h2>Popular movies</h2>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <HorizontalLoadingBar duration={1000} height={6} />}
         {isError && <p>Error fetching movies: {error.message}</p>}
 
         {isSuccess && (
