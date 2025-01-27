@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist&display=swap");
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 @custom-variant dark --dark &:where(.dark, .dark *);
@@ -113,15 +114,37 @@
   }
 
   h3 {
-    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+    @apply scroll-m-20 md:text-2xl text-xl font-semibold tracking-tight;
   }
 
   h2 {
-    @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+    @apply scroll-m-20 border-b pb-2 md:text-3xl text-2xl font-semibold tracking-tight first:mt-0;
   }
 
   h1 {
-    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+    @apply scroll-m-20 md:text-4xl text-3xl font-extrabold tracking-tight lg:text-5xl;
+  }
+}
+
+@layer components {
+  .trending {
+    @apply mt-4;
+
+    & ul {
+      @apply flex flex-row overflow-y-auto gap-5 md:gap-1 w-full overflow-scroll pb-4;
+    }
+
+    & ul li {
+      @apply min-w-[140px] md:min-w-[180px] flex flex-row items-center;
+    }
+
+    & ul li p {
+      @apply fancy-text mt-[22px] text-nowrap select-none pointer-events-none;
+    }
+
+    & ul li img {
+      @apply w-[127px] h-[163px] rounded-xl object-cover -ml-2 md:-ml-3 select-none pointer-events-none;
+    }
   }
 }
 
@@ -134,4 +157,10 @@
 
 @utility background-gradient {
   @apply bg-radial-[at_50%_85%] from-indigo-900/60 via-indigo-900/60 md:via-0% to-background min-h-dvh;
+}
+
+@utility fancy-text {
+  -webkit-text-stroke: 4px rgba(206, 206, 251, 0.5);
+  font-family: "Bebas Neue", sans-serif;
+  @apply text-transparent text-7xl md:text-7xl lg:text-9xl;
 }

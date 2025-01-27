@@ -40,6 +40,25 @@ function Index() {
     },
   });
 
+  const {
+    data: trendingMovies,
+    isLoading: trendingIsLoading,
+    isError: trendingIsError,
+    error: trendingError,
+    isSuccess: trendingIsSuccess,
+  } = useQuery({
+    queryKey: ["trending"],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const endpoint = `${API_BASE_URL}/trending/movie/week`;
+      const response = await fetch(endpoint, { ...API_OPTIONS });
+      const data = await response.json();
+      const zodData = movieSchema.parse(data) as MovieSchema;
+
+      return zodData;
+    },
+  });
+
   const onSubmit = (values: SearchSchema) => {
     console.log(values);
     navigate({
@@ -49,7 +68,7 @@ function Index() {
   };
 
   return (
-    <div className="container mx-auto md:py-8 py-4 px-10">
+    <div className="container mx-auto md:py-8 py-4 px-6">
       <div className="p-8 md:p-0">
         <div className="flex w-full items-center justify-center flex-col">
           <h1 className="text-center inline-block">
@@ -63,7 +82,7 @@ function Index() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-80 md:w-96 mt-4 md:mt-10"
+              className="w-80 md:w-96 mt-8 md:mt-10"
             >
               <FormField
                 control={form.control}
@@ -86,8 +105,49 @@ function Index() {
       </div>
 
       <section className="mt-6">
+        <h2>Trending movies</h2>
+        {trendingIsLoading && (
+          <HorizontalLoadingBar
+            duration={1000}
+            height={6}
+            className="bg-primary"
+          />
+        )}
+
+        {trendingIsError && (
+          <p>Error fetching trending movies: {trendingError.message}</p>
+        )}
+
+        {trendingIsSuccess && (
+          <div className="trending">
+            <ul>
+              {trendingMovies?.results.slice(0, 8).map((movie, index) => (
+                <li key={index}>
+                  <p>{index + 1}</p>
+                  <img
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+                        : "/no-poster.png"
+                    }
+                    alt={movie.title}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      <section className="mt-6">
         <h2>Popular movies</h2>
-        {isLoading && <HorizontalLoadingBar duration={1000} height={6} />}
+        {isLoading && (
+          <HorizontalLoadingBar
+            duration={1000}
+            height={6}
+            className="bg-primary"
+          />
+        )}
         {isError && <p>Error fetching movies: {error.message}</p>}
 
         {isSuccess && (

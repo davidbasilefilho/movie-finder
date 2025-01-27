@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/pagination";
 import { Switch } from "@/components/ui/switch";
 import { API_BASE_URL, API_OPTIONS } from "@/lib/const";
-import { SearchSchema, searchSchema } from "@/lib/schema";
+import { type SearchSchema, searchSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   queryOptions,
@@ -118,17 +118,28 @@ function SearchComponent() {
     resolver: zodResolver(searchSchema),
   });
 
+  const currentPage = search.page || 1;
+  const totalPages = data.total_pages;
+  const pageRange = 5; // Number of page buttons to show
+
+  let startPage = Math.max(1, currentPage - Math.floor(pageRange / 2));
+  const endPage = Math.min(totalPages, startPage + pageRange - 1);
+
+  if (endPage - startPage + 1 < pageRange) {
+    startPage = Math.max(1, endPage - pageRange + 1);
+  }
+
   const onSubmit = (values: SearchSchema) => {
     console.log(values);
     navigate({
       to: "/search",
-      search: { ...values, query: encodeURI(values.query) },
+      search: { ...values, query: encodeURI(values.query), page: 1 },
     });
   };
 
   return (
-    <div className="px-10 py-4 container mx-auto">
-      <h2 className="text-2xl leading-6 align-baseline font-bold inline-block *:inline-block w-full">
+    <div className="px-6 py-4 container mx-auto">
+      <h2 className="text-xl md:text-2xl leading-8 align-super font-bold inline-block *:inline-block w-full">
         <Link to="/" className="mr-2 *:inline-block">
           <ArrowLeft className="w-6 h-6" />
         </Link>
@@ -138,7 +149,7 @@ function SearchComponent() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-wrap *:shrink *:grow gap-1 md:gap-4 mt-4 items-center"
+          className="flex flex-wrap *:shrink *:grow gap-1 md:gap-4 mt-4 mb-8 items-center mx-auto"
         >
           <FormField
             control={form.control}
@@ -187,7 +198,7 @@ function SearchComponent() {
               <FormItem>
                 <FormLabel className="ml-2 mb-2">Include adult</FormLabel>
                 <div className="flex flex-row items-center justify-between bg-background rounded p-4 h-14 shadow gap-3">
-                  <FormDescription className="mt-0 text-sm">
+                  <FormDescription className="mt-0 text-sm leading-5">
                     Include adult films, NSFW, 18+, etc.
                   </FormDescription>
                   <FormControl>
@@ -197,20 +208,6 @@ function SearchComponent() {
                     />
                   </FormControl>
                 </div>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            name="region"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="ml-2 mb-2">Region</FormLabel>
-                <FormControl>
-                  <Input placeholder="Teste" className="" {...field} />
-                </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -247,7 +244,7 @@ function SearchComponent() {
 
       <Pagination>
         <PaginationContent className="flex flex-wrap items-center gap-2 m-6">
-          <PaginationItem className="">
+          <PaginationItem>
             <Link
               to="/search"
               className={buttonVariants({
@@ -260,33 +257,86 @@ function SearchComponent() {
                 ...prev,
                 query: prev.query!,
                 include_adult: prev.include_adult ?? false,
-                page: prev.page ? prev.page - 1 : 1,
+                page: Math.max(1, prev.page ? prev.page - 1 : 1),
               })}
             >
               <ChevronLeft className="h-4 w-4" />
               <span>Previous</span>
             </Link>
           </PaginationItem>
-          {Array.from({ length: data.total_pages }, (_, i) => (
+
+          {startPage > 1 && (
+            <>
+              <PaginationItem>
+                <Link
+                  to="/search"
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "icon",
+                  })}
+                  search={(prev) => ({
+                    ...prev,
+                    query: prev.query!,
+                    include_adult: prev.include_adult ?? false,
+                    page: 1,
+                  })}
+                >
+                  1
+                </Link>
+              </PaginationItem>
+              <PaginationItem key="start-ellipsis">
+                <span className="px-2">...</span>
+              </PaginationItem>
+            </>
+          )}
+
+          {Array.from(
+            { length: endPage - startPage + 1 },
+            (_, i) => i + startPage
+          ).map((i) => (
             <PaginationItem key={i}>
               <Link
-                key={i}
                 to="/search"
                 className={buttonVariants({
-                  variant: search.page === i + 1 ? "default" : "outline",
+                  variant: currentPage === i ? "default" : "outline",
                   size: "icon",
                 })}
                 search={(prev) => ({
                   ...prev,
                   query: prev.query!,
                   include_adult: prev.include_adult ?? false,
-                  page: i + 1,
+                  page: i,
                 })}
               >
-                {i + 1}
+                {i}
               </Link>
             </PaginationItem>
           ))}
+
+          {endPage < totalPages && (
+            <>
+              <PaginationItem key="end-ellipsis">
+                <span className="px-2">...</span>
+              </PaginationItem>
+              <PaginationItem>
+                <Link
+                  to="/search"
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "icon",
+                  })}
+                  search={(prev) => ({
+                    ...prev,
+                    query: prev.query!,
+                    include_adult: prev.include_adult ?? false,
+                    page: totalPages,
+                  })}
+                >
+                  {totalPages}
+                </Link>
+              </PaginationItem>
+            </>
+          )}
 
           <PaginationItem>
             <Link
@@ -295,7 +345,7 @@ function SearchComponent() {
                 ...prev,
                 query: prev.query!,
                 include_adult: prev.include_adult ?? false,
-                page: prev.page ? prev.page + 1 : 1,
+                page: Math.min(data.total_pages, (prev.page || 1) + 1),
               })}
               aria-label="Go to next page"
               className={buttonVariants({
