@@ -171,19 +171,35 @@ function SearchComponent() {
 
           <FormField
             control={form.control}
-            name="primary_release_year"
+            name="year"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="ml-2 mb-2">Year of release</FormLabel>
                 <FormControl>
                   <Input
+                    placeholder="2020, 1971, etc."
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="primary_release_year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="ml-2 mb-2">
+                  Primary release year
+                </FormLabel>
+                <FormControl>
+                  <Input
                     placeholder="2021, 1972, etc."
                     type="number"
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e.target.value);
-                      form.setValue("year", e.target.value);
-                    }}
                   />
                 </FormControl>
                 <FormMessage />
