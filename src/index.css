@@ -89,6 +89,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -100,10 +101,6 @@
   blockquote {
     @apply mt-6 border-l-2 pl-6 italic;
   }
-
-  /* ul {
-    @apply my-6 ml-6 list-disc [&>li]:mt-2;
-  } */
 
   code {
     @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
@@ -142,8 +139,28 @@
       @apply fancy-text mt-[22px] text-nowrap select-none pointer-events-none;
     }
 
-    & ul li img {
-      @apply w-[127px] h-[163px] rounded-xl object-cover -ml-2 md:-ml-3 select-none pointer-events-none;
+    & ul li .relative {
+      @apply relative overflow-hidden rounded -ml-2 md:-ml-3;
+    }
+    -xl & ul li img {
+      @apply w-[127px] aspect-[3/4] object-cover select-none pointer-events-none transition-transform duration-300 ease-in-out;
+    }
+
+    & ul li:hover img {
+      @apply scale-105;
+    }
+
+    & ul li .overview {
+      @apply absolute inset-0 bg-black/80 p-4 flex flex-col justify-end;
+      backdrop-filter: blur(4px);
+    }
+
+    & ul li .overview h3 {
+      @apply text-lg font-bold mb-2 text-white;
+    }
+
+    & ul li .overview p {
+      @apply text-sm text-gray-200 line-clamp-3;
     }
   }
 }

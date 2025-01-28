@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/pagination";
 import { Switch } from "@/components/ui/switch";
 import { API_BASE_URL, API_OPTIONS } from "@/lib/const";
-import { type SearchSchema, searchSchema } from "@/lib/schema";
+import { Movie, type SearchSchema, searchSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   queryOptions,
@@ -44,6 +44,7 @@ import { useForm } from "react-hook-form";
 const createSearchQueryOptions = (search: SearchSchema) =>
   queryOptions({
     queryKey: ["search", search],
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const params = new URLSearchParams({
         query: search.query || "",
@@ -59,7 +60,7 @@ const createSearchQueryOptions = (search: SearchSchema) =>
         `${API_BASE_URL}/search/movie?${params.toString()}`,
         API_OPTIONS
       );
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) throw new Error("Failed to fetch search results");
       return response.json();
     },
   });
@@ -236,26 +237,9 @@ function SearchComponent() {
       </Form>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {data.results.map(
-          (movie: {
-            id: number;
-            adult: boolean;
-            backdrop_path: string;
-            genre_ids: number[];
-            original_language: string;
-            original_title: string;
-            overview: string;
-            popularity: number;
-            poster_path: string;
-            release_date: string;
-            title: string;
-            video: boolean;
-            vote_average: number;
-            vote_count: number;
-          }) => (
-            <MovieCard key={movie.id} movie={movie} />
-          )
-        )}
+        {data.results.map((movie: Movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
       </div>
 
       <Pagination>

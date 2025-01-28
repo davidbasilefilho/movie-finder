@@ -1,7 +1,5 @@
-import * as React from "react";
-import { Button } from "@/components/ui/button"; // Import the Button component
 import { cn } from "@/lib/utils";
-import { Search } from "lucide-react";
+import * as React from "react";
 
 const QueryInput = React.forwardRef<
   HTMLInputElement,
@@ -17,17 +15,17 @@ const QueryInput = React.forwardRef<
       <input
         type={type}
         className={cn(
-          "text-base placeholder:text-base bg-transparent ml-2 w-full h-10 rounded md:text-sm file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none"
+          "text-sm md:text-base placeholder:text-sm md:placeholder:text-base bg-transparent ml-2 w-full h-10 rounded file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none"
         )}
         ref={ref}
         {...props}
       />
-      <Button
+      {/* <Button
         type="submit"
         className="aspect-square cursor-pointer h-10 rounded-xl"
       >
         <Search className="w-8 h-8" />
-      </Button>
+      </Button> */}
     </div>
   );
 });
