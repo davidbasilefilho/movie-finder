@@ -21,7 +21,7 @@ export function TrendingMovies({
       <p className="fancy-text mt-[22px] text-nowrap select-none pointer-events-none -ml-2 md:-ml-3">
         {index + 1}
       </p>
-      <div className="relative overflow-hidden rounded-xl">
+      <div className="relative overflow-hidden rounded">
         <Link
           to="/movie/$movieId"
           params={{ movieId: movie.id.toString() }}

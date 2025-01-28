@@ -119,6 +119,29 @@ function RouteComponent() {
             </motion.div>
 
             <motion.div
+              className="bg-gray-900 rounded-lg p-4 space-y-4 block md:hidden"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Star className="text-yellow-400" />
+                  <span className="text-2xl font-bold">
+                    {movie.vote_average.toFixed(1)}
+                  </span>
+                </div>
+                <span className="text-gray-400">{movie.vote_count} votes</span>
+              </div>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1, delay: 0.8 }}
+              >
+                <Progress value={movie.vote_average * 10} className="h-2" />
+              </motion.div>
+            </motion.div>
+            <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
@@ -210,7 +233,7 @@ function RouteComponent() {
           </motion.div>
 
           <motion.div
-            className="space-y-6 w-fit"
+            className="space-y-6 w-fit hidden md:block"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
