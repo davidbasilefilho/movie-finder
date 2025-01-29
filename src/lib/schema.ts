@@ -63,13 +63,13 @@ export type FindMovieSchema = z.infer<typeof moviesSchema>;
 
 export const movieSchema = z.object({
   adult: z.boolean().default(true),
-  backdrop_path: z.string(),
+  backdrop_path: z.string().nullable(),
   belongs_to_collection: z
     .object({
       id: z.number().int().positive().default(0),
       name: z.string(),
-      poster_path: z.string(),
-      backdrop_path: z.string(),
+      poster_path: z.string().nullable(),
+      backdrop_path: z.string().nullable(),
     })
     .nullable(),
   budget: z.number(),
@@ -102,7 +102,7 @@ export const movieSchema = z.object({
   status: z.string(),
   tagline: z.string(),
   popularity: z.number(),
-  poster_path: z.string(),
+  poster_path: z.string().nullable(),
   release_date: z.string(),
   title: z.string(),
   video: z.boolean().default(true),

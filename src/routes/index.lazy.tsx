@@ -124,7 +124,7 @@ function Index() {
 
         {trendingIsSuccess && (
           <div className="trending">
-            <ul className="flex flex-row w-fit mx-auto px-1 overflow-y-auto gap-5 md:gap-1 overflow-scroll pb-4">
+            <ul className="flex flex-row w-full mx-auto px-1 gap-5 md:gap-1 overflow-x-scroll pb-4">
               {trendingMovies?.results
                 .slice(0, 8)
                 .map((movie, index) => (

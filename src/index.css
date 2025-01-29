@@ -179,5 +179,5 @@
 @utility fancy-text {
   -webkit-text-stroke: 4px rgba(206, 206, 251, 0.5);
   font-family: "Bebas Neue", sans-serif;
-  @apply text-transparent text-7xl md:text-7xl lg:text-9xl;
+  @apply text-transparent text-8xl md:text-8xl lg:text-9xl;
 }

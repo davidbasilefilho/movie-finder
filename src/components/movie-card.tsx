@@ -35,7 +35,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
                   : "/no-poster.png"
               }
               alt={`Poster of "${movie.title}"`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-none"
             />
           </motion.div>
           <AnimatePresence>
@@ -56,7 +56,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
                   {movie.title}
                 </motion.p>
                 <motion.p
-                  className="text-sm text-center font-normal leading-relaxed mt-2 line-clamp-4"
+                  className="text-sm text-center font-normal px-4 leading-relaxed mt-2 line-clamp-4"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.2 }}

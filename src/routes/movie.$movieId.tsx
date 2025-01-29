@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { API_BASE_URL, API_OPTIONS } from "@/lib/const";
 import { movieSchema, type MovieSchema } from "@/lib/schema";
+import { getLanguageName } from "@/lib/utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { formatDate, parse as parseDate } from "date-fns";
@@ -81,7 +82,7 @@ function RouteComponent() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8">
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4 md:p-8">
           <div className="bg-background rounded-full p-2 w-fit hover:scale-[110%] transition-transform duration-200">
             <ArrowLeft
               className="w-6 h-6 text-foreground pointer-events-auto cursor-pointer"
@@ -119,7 +120,7 @@ function RouteComponent() {
             </motion.div>
 
             <motion.div
-              className="bg-gray-900 rounded-lg p-4 space-y-4 block md:hidden"
+              className="bg-gray-900 rounded p-4 space-y-4 block md:hidden"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
@@ -165,7 +166,7 @@ function RouteComponent() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Globe className="text-primary" />
-                  <span>{movie.original_language.toUpperCase()}</span>
+                  <span>{getLanguageName(movie.original_language)}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <TrendingUp className="text-primary" />
@@ -251,7 +252,7 @@ function RouteComponent() {
             </motion.div>
 
             <motion.div
-              className="bg-gray-900 rounded-lg p-4 space-y-4"
+              className="bg-gray-900 rounded p-4 space-y-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
