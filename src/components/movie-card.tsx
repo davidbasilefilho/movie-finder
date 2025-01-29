@@ -3,27 +3,27 @@ import { getLanguageName } from "@/lib/utils";
 import { StarFilledIcon } from "@radix-ui/react-icons";
 import { Link } from "@tanstack/react-router";
 import { formatDate, parse as parseDate } from "date-fns";
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
-      className="rounded-3xl bg-card text-card-foreground shadow flex flex-col h-full overflow-hidden"
+      className="rounded-3xl bg-card text-card-foreground shadow flex flex-col h-full"
       key={movie.id}
     >
-      <div className="relative overflow-hidden aspect-[2/3] mb-4">
-        <Link
-          to="/movie/$movieId"
-          params={{ movieId: movie.id.toString() }}
-          className="block w-full h-full"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+      <Link
+        to="/movie/$movieId"
+        params={{ movieId: movie.id.toString() }}
+        className="relative block aspect-[2/3] mb-4 overflow-hidden rounded-t-3xl"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="absolute inset-0">
           <motion.div
-            className="w-full h-full"
+            className="relative w-full h-full"
             initial={{ scale: 1 }}
             animate={{ scale: isHovered ? 1.05 : 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -35,9 +35,10 @@ export default function MovieCard({ movie }: { movie: Movie }) {
                   : "/no-poster.png"
               }
               alt={`Poster of "${movie.title}"`}
-              className="w-full h-full object-cover rounded-none"
+              className="w-full h-full object-cover"
             />
           </motion.div>
+
           <AnimatePresence>
             {isHovered && (
               <motion.div
@@ -74,8 +75,9 @@ export default function MovieCard({ movie }: { movie: Movie }) {
               </motion.div>
             )}
           </AnimatePresence>
-        </Link>
-      </div>
+        </div>
+      </Link>
+
       <div className="flex flex-col justify-center space-y-1.5 flex-grow px-5 pb-5">
         <h3 className="text-xl font-semibold line-clamp-2 leading-tight">
           {movie.title}
